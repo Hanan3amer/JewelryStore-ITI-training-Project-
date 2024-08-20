@@ -19,7 +19,6 @@ import 'slick-carousel/slick/slick-theme.css';
 import { Link } from 'react-router-dom';
 
 export default function About() {
-let navigate = useNavigate()
 
   return (
     <>
