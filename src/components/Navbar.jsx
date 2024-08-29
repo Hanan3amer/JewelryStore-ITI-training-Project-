@@ -1,14 +1,19 @@
 import React, { useContext } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import logo from '../assets/logo.png';
-import { NavLink } from 'react-router-dom';
 import { AuthContext } from '../Context/AuthContext';
 import { CartContext } from '../Context/CarContext.jsx';
+import { WishlistContext } from '../Context/WishlistContext.jsx';
 export default function Navbar() {
+    let { wishlistItems } = useContext(WishlistContext);
+    let total =  wishlistItems.length
     let { isLogin, logout } = useContext(AuthContext);
     let { cartItems } = useContext(CartContext);
-    let totalQuantity = cartItems.reduce((total, item) => total + item.quantity, 0);
+    let totalQuantity = cartItems.length;
+    let location = useLocation();
+    let activePage = location.pathname === '/' ? 'home' : 'other';
     return (
-        <nav className="navbar navbar-expand-lg p-4 ">
+        <nav className={`navbar navbar-expand-lg p-4 ${activePage === 'home' ? 'home-color' : 'other-color'}`}>
             <div className="container">
                 <img src={logo} className='logo' />
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,11 +52,13 @@ export default function Navbar() {
                                 <i onClick={logout} className="fa-solid fa-right-from-bracket"></i>
                             </>
                         )}
+                        <NavLink to='/whislist' className="text-black">
                         <i className="fa-regular fa-heart position-relative fa-lg">
                             <span className="position-absolute top-0 translate-middle badge rounded-circle main-bg mx-1 p-1">
-                                0
+                                {total}
                             </span>
                         </i>
+                        </NavLink>
                         <NavLink to='/cart' className='text-black'>
                             <i className="fa-solid fa-bag-shopping position-relative fa-lg">
                                 <span className="position-absolute top-0 translate-middle badge rounded-circle main-bg mx-1 p-1">

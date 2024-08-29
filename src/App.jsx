@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import {createHashRouter, RouterProvider} from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './components/Home';
 import Shop from './components/Shop';
@@ -18,21 +18,10 @@ import Edit from './components/Edit';
 import ConfirmPay from './components/Confirmpay.jsx';
 import Editcat from './components/Editcat.jsx'
 import Addcat from './components/Addcat.jsx'
+import Whishlist from './components/Whishlist.jsx';
 
 function App() {
-  let [isLoggedIn, setIsLoggedIn] = useState(false);
-  let [isRegistered, setIsRegistered] = useState(false);
-
-  let handleLoginSuccess = () => {
-    setIsLoggedIn(true);
-  };
-
-  let handleRegisterSuccess = () => {
-    setIsRegistered(true);
-    setIsLoggedIn(true);
-  };
-
-  let routes = createBrowserRouter([
+  let routes = createHashRouter([
     {
       path: '/',
       element: <Layout />,
@@ -48,17 +37,10 @@ function App() {
         { path: "/editcat/:id", element: <Editcat /> },
         { path: "/addcat", element: <Addcat /> },
         { path: 'productdetails/:id', element: <ProductDeatail /> },
-        { path: 'login', element: <Login onLoginSuccess={handleLoginSuccess} /> },
-        { path: 'register', element: <Register onRegisterSuccess={handleRegisterSuccess} /> },
-        {
-          path: 'buy',
-          element: isRegistered
-            ? (isLoggedIn
-              ? <Navigate to="/confirmpay" />
-              : <Navigate to="/login" />)
-            : <Navigate to="/register" />
-        },
+        { path: 'login', element: <Login/> },
+        { path: 'register', element: <Register/> },
         { path: 'confirmpay', element: <ConfirmPay /> },
+        { path: 'whislist', element: <Whishlist /> },
         { path: '*', element: <Notfound /> },
       ],
     },

@@ -5,9 +5,9 @@ import { Outlet } from 'react-router-dom'
 
 export default function Layout() {
     return (
-        <div>
+        <div className='d-flex justify-content-between flex-column'>
             <Navbar></Navbar>
-            <Outlet></Outlet>
+           <Outlet></Outlet>
             <Footer></Footer>
         </div>
     )

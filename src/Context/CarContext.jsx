@@ -1,13 +1,21 @@
-import React, { createContext, useState } from 'react';
-import PropTypes from 'prop-types'; 
+import React, { createContext, useState, useEffect } from 'react';
 
-export const CartContext = createContext();
+export let CartContext = createContext();
 
 export function CartProvider({ children }) {
-  const [cartItems, setCartItems] = useState([]);
+  let [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product) => {
-    const existingItem = cartItems.find(item => item.id === product.id);
+  useEffect(() => {
+    let storedCartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    setCartItems(storedCartItems);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  let addToCart = (product) => {
+    let existingItem = cartItems.find(item => item.id === product.id);
     if (existingItem) {
       setCartItems(cartItems.map(item =>
         item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
@@ -17,19 +25,26 @@ export function CartProvider({ children }) {
     }
   };
 
-  const removeFromCart = (productId) => {
+  let removeFromCart = (productId) => {
     setCartItems(cartItems.filter(item => item.id !== productId));
   };
 
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  let clearCart = () => {
+    setCartItems([]);
+    localStorage.removeItem('cartItems');
+  };
+
+  let decrementQuantity = (productId) => {
+    setCartItems(cartItems.map(item =>
+      item.id === productId ? { ...item, quantity: Math.max(item.quantity - 1, 1) } : item
+    ));
+  };
+
+  let total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, total, setCartItems }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, total, clearCart, decrementQuantity }}>
       {children}
     </CartContext.Provider>
   );
 }
-
-CartProvider.propTypes = {
-  children: PropTypes.node.isRequired,
-};

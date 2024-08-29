@@ -42,7 +42,15 @@ export default function Edit() {
                     <label className="form-label">Price</label>
                     <input type="number" className="form-control" value={inputprod.price} onChange={e => setInputprod({ ...inputprod, price: e.target.value })} />
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="mb-3">
+                    <label className="form-label">Description</label>
+                    <input type="text" className="form-control" value={inputprod.description} onChange={e => setInputprod({ ...inputprod, description: e.target.value })} />
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Category</label>
+                    <input type="text" className="form-control" value={inputprod.category} onChange={e => setInputprod({ ...inputprod, category: e.target.value })} />
+                </div>
+                <button type="submit" className="btn plane"><i class="fa-solid fa-paper-plane"></i> Submit</button>
             </form>
         </div>
     );

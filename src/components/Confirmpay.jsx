@@ -1,14 +1,20 @@
 import React, { useContext, useState } from 'react';
 import { CartContext } from '../Context/CarContext.jsx';
-import { useNavigate } from 'react-router-dom';
 import emailjs from 'emailjs-com';
-
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate } from 'react-router-dom';
 export default function ConfirmPay() {
-  let { cartItems, total } = useContext(CartContext);
+  let { cartItems, total, clearCart } = useContext(CartContext);
   let [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     email: '',
+    phone: '',
+    country: '',
+    city: '',
+    address: '',
+    streetNumber: '',
   });
 
   let navigate = useNavigate();
@@ -20,11 +26,10 @@ export default function ConfirmPay() {
   let handleSubmit = (e) => {
     e.preventDefault();
 
-    
     let templateParams = {
-        to_name: 'Adena', 
-        from_name: `${formData.firstName} ${formData.lastName}`, 
-        message: `
+      to_name: 'Adena',
+      from_name: `${formData.firstName} ${formData.lastName}`,
+      message: `
           Order Details:
           -------------------
           Name: ${formData.firstName} ${formData.lastName}
@@ -43,119 +48,118 @@ export default function ConfirmPay() {
         `
     };
 
-    
     emailjs.send('service_vh88xpc', 'template_h1falmn', templateParams, '5OGsmYsg8yVWGdx0O')
-        .then((response) => {
-            console.log('Email sent successfully!', response.status, response.text);
-            alert('Your Order is Placed Successfully');
-            navigate('/shop'); 
-        }, (error) => {
-            console.error('Failed to send email:', error);
-            alert('Failed to send Email, Please Try Again!');
-        });
-};
-
-
+      .then((response) => {
+        console.log('Email sent successfully!', response.status, response.text);
+        toast.success('Your Order is Placed Successfully');
+        clearCart(); 
+        navigate('/')
+      }, (error) => {
+        console.error('Failed to send email:', error);
+        alert('Failed to send Email, Please Try Again!');
+      });
+  };
   return (
     <div className="container my-5">
       <div className="row confirm">
         <div className="col-md-8">
+          {/* {message ? <div class="alert  alert-success" role="alert">{message}</div> : ''} */}
           <h3 className='cart'>Check Out</h3>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="firstName" className='lbl'>First Name</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="firstName" 
-                name="firstName" 
-                value={formData.firstName} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="firstName"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="lastName" className='lbl'>Last Name</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="lastName" 
-                name="lastName" 
-                value={formData.lastName} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="lastName"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="phone" className='lbl'>Phone</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="phone" 
-                name="phone" 
-                value={formData.phone} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="country" className='lbl'>Country</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="country" 
-                name="country" 
-                value={formData.country} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="country"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="city" className='lbl'>City</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="city" 
-                name="city" 
-                value={formData.city} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="city"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="address" className='lbl'>Address</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="address" 
-                name="address" 
-                value={formData.address} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="streetNumber" className='lbl'>Street Number</label>
-              <input 
-                type="text" 
-                className="form-control field" 
-                id="streetNumber" 
-                name="streetNumber" 
-                value={formData.streetNumber} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="text"
+                className="form-control field"
+                id="streetNumber"
+                name="streetNumber"
+                value={formData.streetNumber}
+                onChange={handleChange}
+                required
               />
             </div>
             <div className="form-group">
               <label htmlFor="email" className='lbl'>Email</label>
-              <input 
-                type="email" 
-                className="form-control field" 
-                id="email" 
-                name="email" 
-                value={formData.email} 
-                onChange={handleChange} 
-                required 
+              <input
+                type="email"
+                className="form-control field"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
               />
             </div>
             <button type="submit" className="btn text-black mt-3 rounded-3">Place Order</button>
